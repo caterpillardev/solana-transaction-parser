@@ -1,0 +1,24 @@
+{
+  "name": "sol-check",
+  "version": "1.0.0",
+  "description": "A minimal tool check and parsing a solana signature",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/docongminh/sol-check.git"
+  },
+  "author": "@minhdocs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/docongminh/sol-check/issues"
+  },
+  "homepage": "https://github.com/docongminh/sol-check#readme",
+  "dependencies": {
+    "npx": "^10.2.2",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  }
+}
