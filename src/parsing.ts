@@ -1,6 +1,12 @@
 import { Connection, PublicKey, ConfirmedSignatureInfo, ParsedMessage } from '@solana/web3.js';
 import { ParseResponse, SigInfo } from './types';
 
+/**
+ * 
+ * @param connection 
+ * @param walletAddress 
+ * @returns List of transaction signature successed
+ */
 export async function getSuccessSignatures(
   connection: Connection,
   walletAddress: string

@@ -4,7 +4,10 @@
   "description": "A minimal tool check and parsing a solana signature",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "pretty": "prettier --check ./src/*.ts",
+    "pretty:fix": "prettier --write ./src/*.ts",
+    "lint": "set -ex; npm run pretty; eslint . --ext .js,.ts",
+    "lint:fix": "npm run pretty:fix && eslint . --fix --ext .js,.ts"
   },
   "repository": {
     "type": "git",
@@ -17,8 +20,17 @@
   },
   "homepage": "https://github.com/docongminh/sol-check#readme",
   "dependencies": {
+    "@solana/spl-token": "^0.2.0",
+    "@solana/web3.js": "^1.41.0",
+    "@typescript-eslint/eslint-plugin": "^5.21.0",
+    "dotenv": "^16.0.0",
     "npx": "^10.2.2",
-    "ts-node": "^10.7.0",
+    "prettier": "^2.6.2",
+    "ts-node": "^10.7.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^5.21.0",
+    "eslint": "^8.14.0",
     "typescript": "^4.6.3"
   }
 }
