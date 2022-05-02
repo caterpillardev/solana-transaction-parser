@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/docongminh/sol-check#readme",
   "dependencies": {
-    "@solana/spl-token": "^0.2.0",
+    "@metaplex-foundation/mpl-token-metadata": "^1.2.5",
+    "@solana/spl-token": "^0.1.8",
     "@solana/web3.js": "^1.41.0",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "dotenv": "^16.0.0",

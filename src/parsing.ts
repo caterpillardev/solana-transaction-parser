@@ -1,10 +1,16 @@
-import { Connection, PublicKey, ConfirmedSignatureInfo, ParsedMessage } from '@solana/web3.js';
-import { ParseResponse, SigInfo } from './types';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  Connection,
+  PublicKey,
+  ConfirmedSignatureInfo,
+  ParsedMessage,
+} from '@solana/web3.js';
+import { SigInfo, InstructionsDetails } from './types';
 
 /**
- * 
- * @param connection 
- * @param walletAddress 
+ *
+ * @param connection
+ * @param walletAddress
  * @returns List of transaction signature successed
  */
 export async function getSuccessSignatures(
@@ -26,10 +32,19 @@ export async function getSuccessSignatures(
   return successSig;
 }
 
-export async function parsing(
+export async function parsingIntructions(
   connection: Connection,
   signature: string
-): Promise<ParsedMessage> {
-  const confirmedTransaction = await connection.getParsedConfirmedTransaction(signature)
-  return confirmedTransaction.transaction.message
+): Promise<InstructionsDetails[]> {
+  const confirmedTransaction = await connection.getParsedConfirmedTransaction(
+    signature
+  );
+  const instructions = confirmedTransaction?.transaction?.message?.instructions;
+  return instructions;
+}
+
+export async function getInfo(connection: Connection) {
+  // @TODO
+
+  return;
 }
