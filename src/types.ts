@@ -33,6 +33,8 @@ export type TokenInfo = {
   mintAddress: string;
   supply: string;
   decimals: number;
+  name?: string;
+  symbol?: string;
 };
 
 export type InstructionsDetails =

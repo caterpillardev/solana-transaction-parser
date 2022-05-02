@@ -6,6 +6,7 @@ import {
   Edition,
   MasterEdition,
 } from '@metaplex-foundation/mpl-token-metadata';
+import { TokenListProvider } from '@solana/spl-token-registry';
 import { TokenStandard, TokenInfo } from './types';
 
 export async function getTokenStandard(
@@ -45,4 +46,42 @@ export async function getTokenInfo(
     supply: mintInfo.supply.toString(),
     decimals: mintInfo.decimals,
   };
+}
+
+export async function getTokenInfoDetails(
+  connection: Connection,
+  mintAddress: string
+): Promise<TokenInfo> {
+  const info = await getTokenInfo(connection, mintAddress);
+  const standard = await getTokenStandard(connection, mintAddress);
+  if (standard === TokenStandard.Fungible) {
+    const item = await new TokenListProvider().resolve().then((tokens) => {
+      return tokens
+        .filterByChainId(101)
+        .getList()
+        .filter((item) => {
+          if (item.address === mintAddress) {
+            return item;
+          } else {
+            return null;
+          }
+        });
+    });
+    if (item) {
+      return {
+        name: item[0]?.name,
+        symbol: item[0]?.symbol,
+        ...info,
+      };
+    }
+    return info;
+  } else {
+    const metadataPDA = await Metadata.getPDA(mintAddress);
+    const tokenMetaData = await Metadata.load(connection, metadataPDA);
+    return {
+      name: tokenMetaData.data?.data?.name,
+      symbol: tokenMetaData.data?.data?.symbol,
+      ...info,
+    };
+  }
 }
