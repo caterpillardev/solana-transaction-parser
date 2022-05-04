@@ -11,7 +11,7 @@ export enum TokenStandard {
   NonFungibleEdition,
 }
 
-export type ParseResponse = {
+export type ParsedSignatureInfo = {
   action?: TypeAction;
   mintAddress?: string;
   typeToken?: TokenStandard;

@@ -1,11 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Connection,
-  PublicKey,
-  ConfirmedSignatureInfo,
-  ParsedMessage,
-} from '@solana/web3.js';
-import { SigInfo, InstructionsDetails } from './types';
+import { Connection, PublicKey, ConfirmedSignatureInfo } from '@solana/web3.js';
+import { getTokenStandard } from './token';
+import { SigInfo, ParsedSignatureInfo } from './types';
 
 /**
  *
@@ -32,19 +29,36 @@ export async function getSuccessSignatures(
   return successSig;
 }
 
-export async function parsingIntructions(
+export async function parsingTransfer(
   connection: Connection,
   signature: string
-): Promise<InstructionsDetails[]> {
+): Promise<ParsedSignatureInfo | null> {
   const confirmedTransaction = await connection.getParsedConfirmedTransaction(
     signature
   );
-  const instructions = confirmedTransaction?.transaction?.message?.instructions;
-  return instructions;
-}
+  const items = confirmedTransaction?.transaction?.message?.instructions;
+  for (const item of items) {
+    if (item) {
+      // @ts-ignore
+      const program = item.program;
+      // @ts-ignore
+      const info = item?.parsed?.info;
+      console.log({program, info})
+      // send token
+      if (program == 'spl-token' && info.type === 'transferChecked') {
+        // Send token
+        const mintAddress = info.mint
+        const standard = getTokenStandard(connection, mintAddress)
+        
+      }
+      if (program == 'system' && info.type === 'transfer') {
+        // send SOL
+        
+      } else {
+        // TODO late
+      }
+    }
+  }
 
-export async function getInfo(connection: Connection) {
-  // @TODO
-
-  return;
+  return null;
 }

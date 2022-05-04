@@ -1,6 +1,6 @@
 import { Connection } from '@solana/web3.js';
 import { getSuccessSignatures } from './parsing';
-import { getTokenStandard } from './token';
+import { getTokenInfoDetails, getTokenStandard } from './token';
 import dotenv from 'dotenv';
 import { convertToObject } from 'typescript';
 dotenv.config();
@@ -14,4 +14,6 @@ dotenv.config();
   console.log('NFT edition: ', await getTokenStandard(connection, nftedition));
   console.log('NFT: ', await getTokenStandard(connection, nft));
   console.log('Token: ', await getTokenStandard(connection, token));
+  console.log('Token info: ', await getTokenInfoDetails(connection, token));
+  console.log('NFT info: ', await getTokenInfoDetails(connection, nft));
 })();

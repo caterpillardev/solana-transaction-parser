@@ -1,11 +1,10 @@
 import { Connection, PublicKey } from '@solana/web3.js';
 import dotenv from 'dotenv';
-import { createConstructor } from 'typescript';
+import { parsingTransfer } from './parsing';
 dotenv.config();
 
 (async () => {
   const rpcUrl = process.env.RPC || 'https://solana-api.projectserum.com';
-  console.log(rpcUrl);
   const connection = new Connection(rpcUrl);
 
   //
@@ -26,27 +25,13 @@ dotenv.config();
     '47jhorFSVevFwstkNb8pYPvhnDt3ndJeNderkZ3zRufmUQuKyk5bZjFNt8ZwJkX3gsjyBsm4ebMBTx8HWSbBHQy4';
   const tradeNFT =
     '9WyU2KCdFz5L2RJihev1TUModu9BWuLu8Rv8qJM5yzmqxP4W1WwDhui3DfyrB76cXPuyJTguoXGtqp4boeBcxRX';
-  // const swap = await connection.getParsedConfirmedTransaction(swapSig);
-
-  // console.log("swap instruction: ", swap.transaction.message.instructions)
-  console.log('------------------');
-  const sig =
-    '28ZdQNMRB6zhJnVcA1KmqjJoBUpcqDgLh192ubrsBz8eCRDGya5q62EfqRRKUXCtQznAk3yqmef8ZJkkVBNi7oim';
-  const nft = await connection.getParsedConfirmedTransaction(sendNFT);
-  // console.log("send nft meta 1: ", nft.meta)
-  console.log('send nft transaction 1:', nft.transaction.message.instructions);
-  // console.log("send nft innerInstructions 2: ", nft.meta.innerInstructions[1].instructions)
-  // console.log("send nft instruction message 0: ", nft.transaction.message.instructions[0])
-  // console.log("send nft instruction message 1: ", nft.transaction.message.instructions[1])
-  console.log('-------------');
-  const nft2 = await connection.getParsedConfirmedTransaction(sendNFT2);
-  // console.log("send nft meta 2: ", nft2.meta)
-  console.log(
-    'send nft transaction 2: ',
-    nft2.transaction.message.instructions
-  );
-
-  const trade = await connection.getParsedConfirmedTransaction(tradeNFT);
-  console.log('trade nft: ', trade);
-  console.log('trade nft: ', trade.transaction.message.instructions);
+  // console.log("instruction swap: ", await parsing(connection, swapSig))
+  // console.log("instruction swap raydiym: ", await parsing(connection, swapRaydium))
+  // await parsingTransfer(connection, sendSOL);
+  await parsingTransfer(connection, sendToken);
+  console.log("------")
+  await parsingTransfer(connection, sendSemiToken);
+  // await parsingTransfer(connection, sendNFT);
+  // await parsingTransfer(connection, sendNFT2);
+  // console.log("instruction trade NFT: ", await parsing(connection, tradeNFT)
 })();
