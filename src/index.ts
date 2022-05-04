@@ -1,6 +1,6 @@
 import { Connection, PublicKey } from '@solana/web3.js';
-import dotenv from 'dotenv';
-import { parsingTransfer } from './parsing';
+import dotenv, { parse } from 'dotenv';
+import { parsingTokenTransfer, parsingSwapToken } from './parsing';
 dotenv.config();
 
 (async () => {
@@ -25,13 +25,23 @@ dotenv.config();
     '47jhorFSVevFwstkNb8pYPvhnDt3ndJeNderkZ3zRufmUQuKyk5bZjFNt8ZwJkX3gsjyBsm4ebMBTx8HWSbBHQy4';
   const tradeNFT =
     '9WyU2KCdFz5L2RJihev1TUModu9BWuLu8Rv8qJM5yzmqxP4W1WwDhui3DfyrB76cXPuyJTguoXGtqp4boeBcxRX';
-  // console.log("instruction swap: ", await parsing(connection, swapSig))
-  // console.log("instruction swap raydiym: ", await parsing(connection, swapRaydium))
-  // await parsingTransfer(connection, sendSOL);
-  await parsingTransfer(connection, sendToken);
-  console.log("------")
-  await parsingTransfer(connection, sendSemiToken);
-  // await parsingTransfer(connection, sendNFT);
-  // await parsingTransfer(connection, sendNFT2);
-  // console.log("instruction trade NFT: ", await parsing(connection, tradeNFT)
+  console.log("instruction swap: ")
+  const instructions = await parsingSwapToken(connection, swapSig)
+  console.log(instructions)
+  console.log(instructions)
+  console.log("-----------------------------")
+  console.log("instruction swap raydiym: ", await parsingSwapToken(connection, swapRaydium))
+  // const parsed = await parsingTokenTransfer(connection, sendToken);
+  // console.log('send Token: ', parsed);
+  // console.log("-------------")
+  // const parsedSOL = await parsingTokenTransfer(connection, sendSOL);
+  // console.log('send SOL: ', parsedSOL);
+  // console.log("-------------")
+  // // await parsingTransfer(connection, sendSemiToken);
+  // const parsedNFT = await parsingTokenTransfer(connection, sendNFT);
+  // console.log('NFT: ', parsedNFT);
+  // console.log("-------------")
+  // console.log("NFT 2: ", await parsingTokenTransfer(connection, sendNFT2));
+  // console.log("-------------")
+  // console.log("trade NFT: ", await parsingTokenTransfer(connection, tradeNFT))
 })();

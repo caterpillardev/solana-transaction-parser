@@ -1,64 +1,72 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Connection, PublicKey, ConfirmedSignatureInfo } from '@solana/web3.js';
-import { getTokenStandard } from './token';
-import { SigInfo, ParsedSignatureInfo } from './types';
+import {
+  Connection,
+  PublicKey,
+  LAMPORTS_PER_SOL,
+} from '@solana/web3.js';
+import { getTokenInfoDetails } from './token';
+import { TokenTransferResponse } from './types';
+import { getOwnerAssociatedAccount } from './utils';
+
 
 /**
- *
- * @param connection
- * @param walletAddress
- * @returns List of transaction signature successed
+ * 
+ * @param connection web3 Connection
+ * @param signature solana transaction signature
+ * @returns Parsed detail transfer token information for this signature
  */
-export async function getSuccessSignatures(
-  connection: Connection,
-  walletAddress: string
-): Promise<SigInfo[]> {
-  const listSignature = await connection.getConfirmedSignaturesForAddress2(
-    new PublicKey(walletAddress)
-  );
-  const successSig = listSignature
-    .filter((item: ConfirmedSignatureInfo) => item.err === null)
-    .map((item: ConfirmedSignatureInfo) => {
-      return {
-        blockTime: item?.blockTime,
-        signature: item?.signature,
-        slot: item?.slot,
-      };
-    });
-  return successSig;
-}
-
-export async function parsingTransfer(
+export async function parsingTokenTransfer(
   connection: Connection,
   signature: string
-): Promise<ParsedSignatureInfo | null> {
+): Promise<TokenTransferResponse> {
   const confirmedTransaction = await connection.getParsedConfirmedTransaction(
     signature
   );
-  const items = confirmedTransaction?.transaction?.message?.instructions;
-  for (const item of items) {
-    if (item) {
+  const instructions = confirmedTransaction?.transaction?.message?.instructions;
+  for (const item of instructions) {
+    // @ts-ignore
+    if (item.program == 'spl-token' || item.program == 'system') {
       // @ts-ignore
       const program = item.program;
       // @ts-ignore
       const info = item?.parsed?.info;
-      console.log({program, info})
+      // @ts-ignore
+      const type = item?.parsed?.type;
       // send token
-      if (program == 'spl-token' && info.type === 'transferChecked') {
+      if (program == 'spl-token' && type == 'transferChecked') {
         // Send token
-        const mintAddress = info.mint
-        const standard = getTokenStandard(connection, mintAddress)
-        
+        const from = await getOwnerAssociatedAccount(connection, info.source);
+        const to = await getOwnerAssociatedAccount(
+          connection,
+          info.destination
+        );
+        const infoDetail = await getTokenInfoDetails(connection, info.mint)
+        return {
+          from: from,
+          to: to,
+          amount: info.tokenAmount.uiAmount,
+          tokenInfo: infoDetail,
+          isNative: false
+        };
       }
-      if (program == 'system' && info.type === 'transfer') {
+      if (program == 'system' && type == 'transfer') {
         // send SOL
-        
-      } else {
-        // TODO late
+        return {
+          from: info.source,
+          to: info.destination,
+          amount: (info.lamports / LAMPORTS_PER_SOL).toString(),
+          isNative: true,
+        };
       }
     }
   }
+}
 
-  return null;
+export async function parsingSwapToken(connection: Connection, signature: string): Promise<any>{
+  const confirmedTransaction = await connection.getParsedConfirmedTransaction(
+    signature
+  );
+  // console.log(confirmedTransaction)
+  return confirmedTransaction.transaction.message.instructions
 }

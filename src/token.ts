@@ -69,6 +69,7 @@ export async function getTokenInfoDetails(
     });
     if (item) {
       return {
+        tokenStandard: standard,
         name: item[0]?.name,
         symbol: item[0]?.symbol,
         ...info,
@@ -79,6 +80,7 @@ export async function getTokenInfoDetails(
     const metadataPDA = await Metadata.getPDA(mintAddress);
     const tokenMetaData = await Metadata.load(connection, metadataPDA);
     return {
+      tokenStandard: standard,
       name: tokenMetaData.data?.data?.name,
       symbol: tokenMetaData.data?.data?.symbol,
       ...info,

@@ -23,6 +23,16 @@ export type ParsedSignatureInfo = {
   programId?: string;
 };
 
+export type TokenTransferResponse = {
+  mint?: string;
+  from: string;
+  to: string;
+  amount: string;
+  decimals?: number;
+  tokenInfo?: TokenInfo,
+  isNative?: boolean
+};
+
 export type SigInfo = {
   blockTime?: number;
   signature?: string;
@@ -30,11 +40,13 @@ export type SigInfo = {
 };
 
 export type TokenInfo = {
+  tokenStandard?: TokenStandard;
   mintAddress: string;
   supply: string;
   decimals: number;
   name?: string;
   symbol?: string;
+  
 };
 
 export type InstructionsDetails =
