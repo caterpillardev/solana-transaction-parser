@@ -9,6 +9,12 @@ import {
 import { TokenListProvider } from '@solana/spl-token-registry';
 import { TokenStandard, TokenInfo } from './types';
 
+/**
+ *
+ * @param connection
+ * @param mintAddress
+ * @returns Return Token standard of specify mint address (based on metaplex standard)
+ */
 export async function getTokenStandard(
   connection: Connection,
   mintAddress: string
@@ -30,6 +36,12 @@ export async function getTokenStandard(
   }
 }
 
+/**
+ *
+ * @param connection
+ * @param mintAddress
+ * @returns Get basic info of a token
+ */
 export async function getTokenInfo(
   connection: Connection,
   mintAddress: string
@@ -48,6 +60,12 @@ export async function getTokenInfo(
   };
 }
 
+/**
+ *
+ * @param connection
+ * @param mintAddress
+ * @returns Get token info in detail
+ */
 export async function getTokenInfoDetails(
   connection: Connection,
   mintAddress: string

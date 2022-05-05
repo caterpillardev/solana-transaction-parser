@@ -2,7 +2,12 @@ import {
   ParsedInstruction,
   PartiallyDecodedInstruction,
 } from '@solana/web3.js';
-export type TypeAction = 'swap' | 'transfer' | 'send' | 'receive';
+
+export enum SignatureType {
+  Swap,
+  Transfer,
+  Unknown,
+}
 
 export enum TokenStandard {
   NonFungible,
@@ -11,26 +16,14 @@ export enum TokenStandard {
   NonFungibleEdition,
 }
 
-export type ParsedSignatureInfo = {
-  action?: TypeAction;
-  mintAddress?: string;
-  typeToken?: TokenStandard;
-  from?: string;
-  to?: string;
-  type?: string;
-  amount?: string;
-  program?: string;
-  programId?: string;
-};
-
 export type TokenTransferResponse = {
   mint?: string;
   from: string;
   to: string;
   amount: string;
   decimals?: number;
-  tokenInfo?: TokenInfo,
-  isNative?: boolean
+  tokenInfo?: TokenInfo;
+  isNative?: boolean;
 };
 
 export type SigInfo = {
@@ -46,9 +39,19 @@ export type TokenInfo = {
   decimals: number;
   name?: string;
   symbol?: string;
-  
 };
 
+export type TokenSwapInfo = {
+  from: string;
+  to: string;
+  token: TokenInfo;
+  rawAmount: string;
+};
+
+export type SwapInfo = {
+  source: TokenSwapInfo;
+  destination: TokenSwapInfo;
+};
 export type InstructionsDetails =
   | ParsedInstruction
   | PartiallyDecodedInstruction;
